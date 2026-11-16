@@ -34,7 +34,7 @@ def find_dots(font, stem, max_rel=2.0, italic_angle=0.0):
     return found
 
 
-def square_dots(font, selection, italic_angle=0.0, fill=1.0):
+def square_dots(font, selection, italic_angle=0.0, fill=1.0, min_side=0):
     """fill = Quadratfläche relativ zur Kreisfläche (1.0 = gleiche Fläche)."""
     tan = math.tan(math.radians(-italic_angle)) if italic_angle else 0.0
     n = 0
@@ -52,13 +52,21 @@ def square_dots(font, selection, italic_angle=0.0, fill=1.0):
             cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
             w, h = max(xs) - min(xs), max(ys) - min(ys)
             side = math.sqrt(math.pi / 4 * w * h) * math.sqrt(fill) * 1.04
+            # nie schmaler als der Stamm des Gewichts (i, j in Black). Waagrechte Paare (Trema, Auslassungspunkte)
+            # nur bis 0,8 Stamm, sonst verschmelzen sie. Vergroessert wird nach oben, der Abstand zum Stamm bleibt.
+            pair = sum(1 for o in g.contours if o is not c and len([q for q in o.points if q.type is not None]) in (4,) and abs((sum(q.y for q in o.points) / len(o.points)) - (sum(q.y for q in c.points) / len(c.points))) < 30 and o is not c) >= 1
+            want = min_side * (0.8 if pair else 1.0)
+            cy_o = cy
+            if want > side:
+                cy += (want - side) / 2
+                side = want
             hs = side / 2
             # Ecken: jeder Kurvenpunkt (Extrempunkt) -> die ihm naechste Ecke der Richtung
             corner = {"l": (-hs, 0), "r": (hs, 0), "t": (0, hs), "b": (0, -hs)}
             # Ordnet Extrempunkte nach Lage und setzt Ecken so, dass die Reihenfolge erhalten bleibt
             order = []
             for (ux, uy) in un:
-                dx, dy = ux - cx, uy - cy
+                dx, dy = ux - cx, uy - cy_o
                 order.append("r" if dx > abs(dy) else "l" if -dx > abs(dy) else "t" if dy > 0 else "b")
             # Extrempunkt (z. B. rechts) -> Ecke zwischen zwei Seiten: Laufrichtung gegen den Uhrzeigersinn
             nxt = {"r": (hs, hs), "t": (-hs, hs), "l": (-hs, -hs), "b": (hs, -hs)}

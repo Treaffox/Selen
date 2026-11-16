@@ -108,7 +108,7 @@ PAGE = """<!doctype html>
   <meta name="description" content="Selen ist eine humanistische Sans in der Tradition von Tahoma und Verdana: Gewichte 200 bis 900, aufrecht und kursiv, Latein, Griechisch und Kyrillisch. Frei unter der SIL Open Font License.">
   <meta name="theme-color" content="#2f6397">
   <link rel="icon" type="image/svg+xml" href="assets/brand/trfx-legacy-icon.svg">
-  <link rel="preload" href="assets/fonts/Selen-VF.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/Selen-VF.woff2?v=@V@" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/trfx-legacy.min.css?v=@V@">
   <link rel="stylesheet" href="assets/selen.css?v=@V@">
 </head>
@@ -318,6 +318,10 @@ body { font-family: "Selen", Tahoma, Verdana, sans-serif; }</code></pre>
 
 <section id="changelog" aria-labelledby="h-changelog">
   <h2 id="h-changelog">Änderungen</h2>
+  <h3>0.1.1 – 16.11.2026</h3>
+  <ul>
+    <li>Korrigiert: Der i-Punkt (und jeder andere einzelne Punkt) war in schweren Gewichten schmaler als der Stamm. Jetzt ist jeder Punkt mindestens so breit wie der Stamm seines Gewichts, aufrecht und kursiv.</li>
+  </ul>
   <h3>0.1.0 – 16.11.2026</h3>
   <ul>
     <li>Erste Version: Gewichte 200 bis 900, aufrecht und kursiv, Variable Font und 16 statische Schnitte.</li>
@@ -368,7 +372,8 @@ def build():
     shutil.copy(VENDOR / "legacy.js", OUT / "assets/legacy.js")
     for n in ("trfx-legacy-logo.svg", "trfx-legacy-icon.svg"):
         shutil.copy(VENDOR / n, OUT / "assets/brand" / n)
-    shutil.copy(SITE / "src/selen.css", OUT / "assets/selen.css")
+    css = (SITE / "src/selen.css").read_text().replace(".woff2\")", f".woff2?v={V}\")")
+    (OUT / "assets/selen.css").write_text(css)  # Version an die Schriftadresse: Browser-Cache (7 Tage) umgehen
     shutil.copy(SITE / "src/selen.js", OUT / "assets/selen.js")
     shutil.copy(ROOT / "LICENSE", OUT / "assets/LICENSE.txt")
 

@@ -5,6 +5,11 @@ Alle nennenswerten Änderungen an der Schrift stehen hier. Versionen folgen
 Satz oder Zeilenhöhe bestehender Texte sichtbar verschieben, MINOR für neue
 Zeichen und Funktionen, PATCH für Korrekturen.
 
+## [0.1.1] – 2026-11-16
+
+### Korrigiert
+- **Punkte schmaler als der Stamm:** Die quadratischen Punkte (i, j, Satzzeichen, Trema) hatten die Fläche des alten runden Punkts. In schweren Gewichten ist der Stamm aber breiter als diese Fläche, so dass der i-Punkt schmaler war als der Balken darunter (Black, auch Bold und ExtraBold). Jetzt ist jeder einzelne Punkt mindestens so breit wie der Stamm seines Gewichts (Waagrechte Paare wie Trema und Auslassungspunkte mindestens 0,8 Stamm, sonst verschmelzen sie). Vergrößert wird nach oben, der Abstand zum Stamm bleibt. Betrifft alle Zeichen mit Punkten: i, j, ï und alle Akzente mit Punkt, ! ? : ; . … und die Punkte in ɨ, ǰ und Verwandten, aufrecht und kursiv.
+
 ## [0.1.0] – 2026-11-16
 
 Erste Version. Humanistische Interface-Sans für das TRFX Legacy Design System,

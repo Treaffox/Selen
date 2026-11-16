@@ -175,7 +175,10 @@ def build_style(style):
         f = load_master(src)
         scale_font(f, C.SCALE)
         if dot_sel:
-            rep.setdefault("dots_squared", {})[master] = square_dots(f, dot_sel, ang)
+            xs = [p.x - p.y * __import__("math").tan(__import__("math").radians(-ang)) for c in f["l"].contours for p in c.points if p.type is not None]
+            stem_m = round(max(xs) - min(xs))
+            rep.setdefault("stem", {})[master] = stem_m
+            rep.setdefault("dots_squared", {})[master] = square_dots(f, dot_sel, ang, min_side=stem_m)
         for csel in rounds:
             flatten(f, csel)
         track_font(f, C.TRACK[master])
