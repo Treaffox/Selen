@@ -79,5 +79,21 @@ const hv = await fetch(BASE + "/version.json", { headers: local ? { "X-Forwarded
 ok((await hv.json()).version, "version.json");
 const hh = await fetch(BASE + "/", { headers: local ? { "X-Forwarded-Proto": "https" } : {} });
 ok((hh.headers.get("content-security-policy") || "").includes("default-src 'none'"), "CSP fehlt");
+// Fester Link /latest/: gleiche Adresse, no-cache, CORS offen, richtige Typen, gleiche Version wie version.json
+const H = local ? { "X-Forwarded-Proto": "https" } : {};
+for (const [f, type] of [["selen.css", "text/css"], ["Selen-VF.woff2", "font/woff2"], ["Selen-Italic-VF.woff2", "font/woff2"], ["version.json", "application/json"], ["Selen-latest.zip", "application/zip"]]) {
+  const r = await fetch(`${BASE}/latest/${f}`, { headers: H });
+  ok(r.status === 200, `latest/${f}: ${r.status}`);
+  ok((r.headers.get("content-type") || "").startsWith(type), `latest/${f}: Typ ${r.headers.get("content-type")}`);
+  ok(r.headers.get("access-control-allow-origin") === "*", `latest/${f}: CORS fehlt`);
+  ok((r.headers.get("cache-control") || "").includes("no-cache"), `latest/${f}: Cache-Control ${r.headers.get("cache-control")}`);
+}
+const lv = await (await fetch(`${BASE}/latest/version.json`, { headers: H })).json();
+const sv = await (await fetch(`${BASE}/version.json`, { headers: H })).json();
+ok(lv.version === sv.version, `latest/version.json ${lv.version} ≠ version.json ${sv.version}`);
+const lcss = await (await fetch(`${BASE}/latest/selen.css`, { headers: H })).text();
+ok(/font-weight: 200 900/.test(lcss) && lcss.includes("Selen-VF.woff2") && lcss.includes("Selen-Italic-VF.woff2"), "latest/selen.css ohne @font-face");
+const lz = await fetch(`${BASE}/latest/Selen-latest.zip`, { headers: H });
+ok((await lz.arrayBuffer()).byteLength > 1e6, "latest/Selen-latest.zip zu klein");
 console.log(`${passes} von ${passes + fails} Prüfungen bestanden`);
 process.exit(fails ? 1 : 0);

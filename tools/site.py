@@ -128,6 +128,7 @@ PAGE = """<!doctype html>
         <li><a href="#tester">@I_sliders@Tester</a></li>
         <li><a href="#zeichen">@I_keyboard@Zeichen</a></li>
         <li><a href="#features">@I_gear@Features</a></li>
+        <li><a href="#festerlink">@I_globe@Einbinden</a></li>
         <li><a href="#download">@I_download@Download</a></li>
       </ul>
     </nav>
@@ -158,6 +159,7 @@ PAGE = """<!doctype html>
           <li><a href="#aktion">In Aktion</a></li>
           <li><a href="#zeichen">Zeichen</a></li>
           <li><a href="#features">Features</a></li>
+          <li><a href="#festerlink">Per festem Link</a></li>
           <li><a href="#download">Download</a></li>
           <li><a href="#herkunft">Herkunft und Lizenz</a></li>
           <li><a href="#changelog">Änderungen</a></li>
@@ -283,6 +285,52 @@ PAGE = """<!doctype html>
   <p>Aktivieren im Web mit <code>font-feature-settings: "pnum"</code> oder <code>font-variant-numeric: proportional-nums</code>.</p>
 </section>
 
+<section id="festerlink" aria-labelledby="h-festerlink">
+  <h2 id="h-festerlink">Per festem Link einbinden</h2>
+  <div class="lg-notice lg-notice--info" role="note"><p><strong>Empfohlen für alle Apps:</strong> Die Schrift wird immer über denselben Link geladen. Unter dieser Adresse liegt immer die neueste Version. Ändert sich Selen, muss <strong>keine App angepasst werden</strong>.</p></div>
+  <table class="lg-table lg-table--zebra">
+    <caption>Feste Adressen (immer die neueste Version)</caption>
+    <thead><tr><th scope="col">Adresse</th><th scope="col">Inhalt</th></tr></thead>
+    <tbody>
+      <tr><th scope="row"><code>https://selen.trfx.de/latest/selen.css</code></th><td>fertiges CSS mit <code>@font-face</code> für Selen (aufrecht und kursiv, Gewicht 200–900)</td></tr>
+      <tr><th scope="row"><code>https://selen.trfx.de/latest/Selen-VF.woff2</code></th><td>Variable Font, aufrecht</td></tr>
+      <tr><th scope="row"><code>https://selen.trfx.de/latest/Selen-Italic-VF.woff2</code></th><td>Variable Font, kursiv</td></tr>
+      <tr><th scope="row"><code>https://selen.trfx.de/latest/Selen-latest.zip</code></th><td>komplettes Paket (alle Formate, Lizenz, Änderungsprotokoll)</td></tr>
+      <tr><th scope="row"><code>https://selen.trfx.de/latest/version.json</code></th><td>aktuelle Versionsnummer und Dateiliste</td></tr>
+    </tbody>
+  </table>
+  <h3>In die Seite einbauen</h3>
+<pre class="lg-source" tabindex="0"><code>&lt;link rel="stylesheet" href="https://selen.trfx.de/latest/selen.css"&gt;
+
+body { font-family: "Selen", Tahoma, Verdana, sans-serif; }</code></pre>
+  <p>Die Adressen antworten mit <code>Cache-Control: no-cache</code> und erlauben fremde Seiten (CORS). Browser fragen bei jedem Aufruf kurz nach (ETag) und laden nur bei einer neuen Version neu. Wenn die App eine Content-Security-Policy setzt, müssen <code>style-src</code> und <code>font-src</code> <code>https://selen.trfx.de</code> erlauben.</p>
+  <h3>Fallback: neueste Version herunterladen und selbst hosten</h3>
+  <p>Jede App liefert zusätzlich eine eigene Kopie der <strong>neuesten</strong> Version aus. Sie springt ein, wenn der feste Link nicht erreichbar ist (Ausfall, Firmennetz, Offline). Die Kopie wird beim Bauen oder Ausrollen der App frisch geholt, nicht von Hand gepflegt:</p>
+<pre class="lg-source" tabindex="0"><code>mkdir -p public/fonts
+curl -fsSL https://selen.trfx.de/latest/Selen-VF.woff2        -o public/fonts/Selen-VF.woff2
+curl -fsSL https://selen.trfx.de/latest/Selen-Italic-VF.woff2 -o public/fonts/Selen-Italic-VF.woff2
+curl -fsSL https://selen.trfx.de/latest/version.json          -o public/fonts/selen-version.json</code></pre>
+  <p>Im CSS steht der feste Link zuerst, die eigene Kopie danach. Der Browser nimmt die zweite Quelle nur, wenn die erste nicht lädt:</p>
+<pre class="lg-source" tabindex="0"><code>@font-face {
+  font-family: "Selen";
+  src: url("https://selen.trfx.de/latest/Selen-VF.woff2") format("woff2"),
+       url("/fonts/Selen-VF.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Selen";
+  src: url("https://selen.trfx.de/latest/Selen-Italic-VF.woff2") format("woff2"),
+       url("/fonts/Selen-Italic-VF.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: italic;
+  font-display: swap;
+}</code></pre>
+  <p>Ohne eigenen <code>@font-face</code> genügt <code>selen.css</code> allein. Die Kopie lässt sich auch ohne Fallback-CSS über das Paket <code>Selen-latest.zip</code> holen. Feste Versionen bleiben unter <code>downloads/Selen-&lt;Version&gt;.zip</code> erhalten.</p>
+  <p>Änderungen, die den Satz bestehender Texte sichtbar verschieben (Breiten, Zeilenhöhe), erhöhen die Hauptversion und stehen vorher im Änderungsprotokoll. Gewohnte Korrekturen kommen ohne Ankündigung über den festen Link.</p>
+</section>
+
 <section id="download" aria-labelledby="h-download">
   <h2 id="h-download">Download</h2>
   <div class="lg-notice lg-notice--info" role="note"><p><strong>Selen @V@</strong>: Variable Fonts, 16 statische Schnitte (OTF und gehintete TTF), WOFF2, Lizenz und Anleitung in einem Paket.</p></div>
@@ -377,6 +425,11 @@ def build():
     shutil.copy(SITE / "src/selen.js", OUT / "assets/selen.js")
     shutil.copy(ROOT / "LICENSE", OUT / "assets/LICENSE.txt")
 
+    # Fester Link: /latest/ (immer die neueste Version unter gleicher Adresse)
+    (OUT / "latest").mkdir()
+    shutil.copy(dist / "webfonts/Selen[wght].woff2", OUT / "latest/Selen-VF.woff2")
+    shutil.copy(dist / "webfonts/Selen-Italic[wght].woff2", OUT / "latest/Selen-Italic-VF.woff2")
+    (OUT / "latest/selen.css").write_text(LATEST_CSS)
     # Download-Paket
     zpath = OUT / "downloads" / f"Selen-{V}.zip"
     with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
@@ -385,6 +438,7 @@ def build():
                 z.write(p, f"Selen-{V}/{sub}/{p.name}")
         for n in ("LICENSE", "README.md", "CHANGELOG.md", "VERSION"):
             z.write(ROOT / n, f"Selen-{V}/{n}")
+    shutil.copy(zpath, OUT / "latest/Selen-latest.zip")
     size = zpath.stat().st_size / 1e6
 
     page = PAGE
@@ -401,12 +455,33 @@ def build():
     (OUT / "robots.txt").write_text("User-agent: *\nAllow: /\n")
     (OUT / "version.json").write_text(json.dumps({"name": "Selen", "version": V, "download": f"/downloads/Selen-{V}.zip",
                                                    "characters": ncp, "glyphs": ng}, indent=1))
+    (OUT / "latest/version.json").write_text(json.dumps({
+        "name": "Selen", "version": V, "css": "https://selen.trfx.de/latest/selen.css",
+        "files": {"upright": "https://selen.trfx.de/latest/Selen-VF.woff2", "italic": "https://selen.trfx.de/latest/Selen-Italic-VF.woff2",
+                  "package": "https://selen.trfx.de/latest/Selen-latest.zip"}}, indent=1))
     print(f"Seite: {OUT} ({ncp} Zeichen, ZIP {size:.1f} MB)")
 
 
 def sprite_block():
     return f'<div hidden>{sprite()}</div>' if False else sprite().replace("<svg ", '<svg class="lg-sprite" aria-hidden="true" focusable="false" ', 1)
 
+
+LATEST_CSS = """/* Selen: fester Link, immer die neueste Version. https://selen.trfx.de */
+@font-face {
+  font-family: "Selen";
+  src: url("Selen-VF.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Selen";
+  src: url("Selen-Italic-VF.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: italic;
+  font-display: swap;
+}
+"""
 
 PAGE404 = """<!doctype html>
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">

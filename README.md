@@ -23,7 +23,22 @@ Quell-Repository unter `fonts/`.
 | `ttf/` | 16 statische Schnitte, gehintet (Windows, kleine Größen) |
 | `webfonts/` | WOFF2 der Variable Fonts und der statischen Schnitte |
 
-## Im Web einbinden
+## Im Web einbinden: fester Link (empfohlen)
+
+Alle Apps laden Selen über denselben festen Link. Unter dieser Adresse liegt immer
+die neueste Version, bei einer Änderung muss keine App angepasst werden:
+
+```html
+<link rel="stylesheet" href="https://selen.trfx.de/latest/selen.css">
+```
+
+Weitere feste Adressen: `latest/Selen-VF.woff2`, `latest/Selen-Italic-VF.woff2`,
+`latest/Selen-latest.zip`, `latest/version.json`. Als Fallback liefert jede App
+eine eigene Kopie der neuesten Version aus (beim Bauen mit `curl` von denselben
+Adressen geholt) und nennt sie als zweite `src`-Quelle im `@font-face`. Details und
+Beispiele: https://selen.trfx.de/#festerlink
+
+## Im Web einbinden: selbst gehostet
 
 ```css
 @font-face {
