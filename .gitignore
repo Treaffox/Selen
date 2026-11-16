@@ -1,0 +1,10 @@
+# Erzeugt beim Bauen, nicht Teil des Repositorys
+.venv/
+upstream/
+sources/
+dist/
+site/dist/
+site/node_modules/
+__pycache__/
+*.pyc
+*.log

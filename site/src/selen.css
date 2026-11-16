@@ -1,0 +1,151 @@
+/* TRFX Legacy – Testseite: nur Dinge, die zur Dokumentation gehören, nicht zum Design System. */
+
+/* ---------- Kopf der Startseite ---------- */
+.hero {
+  margin-bottom: var(--lg-sp-7);
+}
+
+.hero .lg-window__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--lg-sp-6);
+  align-items: center;
+  padding: var(--lg-sp-6);
+}
+
+.hero h1 {
+  margin: 0 0 var(--lg-sp-3);
+  padding: 0;
+  font-size: 2rem;
+  border: 0;
+  box-shadow: none;
+}
+
+.hero__claim {
+  margin: 0 0 var(--lg-sp-5);
+  font-size: var(--lg-fs-lg);
+}
+
+.hero__sample_unused {
+  display: grid;
+  grid-template-columns: repeat(2, 4.2rem);
+  gap: 6px;
+}
+
+.hero__sample_unused span {
+  display: grid;
+  place-items: center;
+  height: 4.2rem;
+  font: 700 2.2rem / 1 var(--lg-font-head);
+  color: #fff;
+  border-radius: 6px;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.hero__sample_unused span:nth-child(1) { background: var(--lg-brand-t); }
+.hero__sample_unused span:nth-child(2) { background: var(--lg-brand-r); }
+.hero__sample_unused span:nth-child(3) { background: var(--lg-brand-f); color: #3a2a00; text-shadow: none; }
+.hero__sample_unused span:nth-child(4) { background: var(--lg-brand-x); }
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lg-sp-3) var(--lg-sp-6);
+  margin: var(--lg-sp-5) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--lg-fs-sm);
+}
+
+.facts li {
+  margin: 0;
+}
+
+.facts strong {
+  display: block;
+  font: 700 var(--lg-fs-xl) / 1.1 var(--lg-font-head);
+  color: var(--lg-heading);
+}
+
+
+/* ---------- Selen: Schrift und Seite ---------- */
+@font-face {
+  font-family: "Selen";
+  src: url("fonts/Selen-VF.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Selen";
+  src: url("fonts/Selen-Italic-VF.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: italic;
+  font-display: swap;
+}
+:root {
+  --lg-font-text: "Selen", Tahoma, Verdana, "DejaVu Sans", sans-serif;
+  --lg-font-head: var(--lg-font-text);
+}
+
+.hero__sample {
+  display: grid;
+  gap: 0.2rem;
+  justify-items: center;
+  padding: var(--lg-sp-4) var(--lg-sp-6);
+  background: var(--lg-panel);
+  border: var(--lg-btn-border);
+}
+.hero__sample .big { font-size: 5.5rem; line-height: 1; font-weight: 700; color: var(--lg-heading); }
+.hero__sample .small { font-size: var(--lg-fs-sm); text-align: center; }
+
+section { margin-bottom: var(--lg-sp-7); }
+.sub { font-size: var(--lg-fs-xs); font-weight: 400; color: var(--lg-text-muted, inherit); }
+.count { font-weight: 400; font-size: var(--lg-fs-sm); }
+
+.w200 { font-weight: 200; } .w300 { font-weight: 300; } .w400 { font-weight: 400; } .w500 { font-weight: 500; }
+.w600 { font-weight: 600; } .w700 { font-weight: 700; } .w800 { font-weight: 800; } .w900 { font-weight: 900; }
+.it { font-style: italic; }
+td.w200, td.w300, td.w400, td.w500, td.w600, td.w700, td.w800, td.w900 { font-size: var(--lg-fs-lg); }
+
+.tester-controls {
+  display: grid;
+  gap: var(--lg-sp-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  align-items: end;
+}
+.tester-controls .lg-field:first-child { grid-column: 1 / -1; }
+.tester-out {
+  margin: var(--lg-sp-5) 0 0;
+  padding: var(--lg-sp-4);
+  min-height: 3em;
+  overflow-wrap: anywhere;
+  background: #fff;
+  border: var(--lg-btn-border);
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.glyphs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2.6rem, 1fr));
+  gap: 2px;
+  margin: 0 0 var(--lg-sp-5);
+}
+.glyph {
+  display: grid;
+  place-items: center;
+  height: 2.6rem;
+  font-size: 1.5rem;
+  line-height: 1;
+  background: #fff;
+  border: 1px solid var(--lg-frame);
+}
+
+.lg-toolbar { margin-bottom: var(--lg-sp-4); }
+.lg-form { margin-top: var(--lg-sp-4); display: grid; gap: var(--lg-sp-3); max-width: 28rem; }
+
+@media (max-width: 860px) {
+  .hero .lg-window__body { grid-template-columns: minmax(0, 1fr); }
+  .hero__sample { display: none; }
+}

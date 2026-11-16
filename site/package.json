@@ -1,0 +1,10 @@
+{
+  "name": "selen-site-tests",
+  "private": true,
+  "type": "module",
+  "description": "Browsertests der Selen-Website (Playwright, axe-core)",
+  "devDependencies": {
+    "playwright": "1.63.0",
+    "axe-core": "4.11.1"
+  }
+}
